@@ -3,73 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yel's Phonics Board Game</title>
+    <title>Yel's Forest Phonics Adventure</title>
     <style>
         :root {
-            --th-color: #e0f7fa;
-            --th-border: #00bcd4;
-            --wh-color: #e8f5e9;
-            --wh-border: #4caf50;
-            --qu-color: #f3e5f5;
-            --qu-border: #9c27b0;
-            --start-color: #fff9c4;
+            --forest-bg: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+            --board-bg: rgba(255, 255, 255, 0.9);
+            --wood-color: #8d6e63;
+            --wood-dark: #5d4037;
+            
+            /* Tile Colors - Forest Palette */
+            --th-bg: #e0f2f1;
+            --th-border: #26a69a;
+            --th-text: #00695c;
+            
+            --wh-bg: #e1f5fe;
+            --wh-border: #29b6f6;
+            --wh-text: #01579b;
+            
+            --qu-bg: #f3e5f5;
+            --qu-border: #ab47bc;
+            --qu-text: #7b1fa2;
+            
+            --start-bg: #fff9c4;
             --start-border: #fbc02d;
-            --finish-color: #ffcdd2;
-            --finish-border: #f44336;
-            --bg-color: #f4f7f6;
-            --text-color: #333;
+            --start-text: #f57f17;
+            
+            --finish-bg: #ffcdd2;
+            --finish-border: #ef5350;
+            --finish-text: #c62828;
         }
 
         body {
-            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: 'Segoe UI', 'Comic Sans MS', sans-serif;
+            background: var(--forest-bg);
+            color: #333;
             margin: 0;
             padding: 20px;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234caf50' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
 
         header {
             text-align: center;
             margin-bottom: 20px;
+            color: #1b5e20;
+            text-shadow: 0 2px 0 rgba(255,255,255,0.5);
         }
 
         h1 {
-            font-size: 2.5rem;
-            color: #2c3e50;
+            font-size: 2.8rem;
             margin: 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .subtitle {
-            font-size: 1.1rem;
-            color: #555;
-            margin-top: 5px;
+            letter-spacing: 1px;
         }
 
         .controls {
-            background: white;
-            padding: 15px 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
             margin-bottom: 25px;
             display: flex;
-            gap: 20px;
             align-items: center;
-            flex-wrap: wrap;
-            justify-content: center;
+            gap: 20px;
+            border: 3px solid var(--wood-color);
         }
 
-        .dice-display {
+        /* Token Selection */
+        .token-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .token-option {
             font-size: 2rem;
-            font-weight: bold;
-            min-width: 60px;
-            text-align: center;
-            background: #ecf0f1;
-            padding: 5px 15px;
-            border-radius: 10px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            transition: all 0.2s;
+            background: #f1f8e9;
+        }
+
+        .token-option:hover {
+            transform: scale(1.2);
+        }
+
+        .token-option.selected {
+            border-color: var(--wood-dark);
+            background: white;
+            transform: scale(1.2);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .divider {
+            width: 3px;
+            height: 40px;
+            background: #ccc;
+            border-radius: 2px;
+        }
+
+        /* Bigger Dice */
+        .dice-display {
+            font-size: 4rem; /* Much bigger */
+            line-height: 1;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1), 0 5px 0 #b0bec5;
+            border: 4px solid #90a4ae;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .dice-display:active {
+            transform: translateY(4px);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1), 0 1px 0 #b0bec5;
         }
 
         button {
@@ -77,54 +133,31 @@
             font-size: 1.2rem;
             padding: 10px 20px;
             border: none;
-            border-radius: 10px;
+            border-radius: 30px;
             cursor: pointer;
-            transition: transform 0.1s, box-shadow 0.1s;
             font-weight: bold;
             color: white;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+            transition: transform 0.1s;
         }
 
-        button:active {
-            transform: scale(0.95);
-        }
+        button:active { transform: translateY(4px); box-shadow: none; }
 
-        .btn-roll { background-color: #3498db; box-shadow: 0 4px 0 #2980b9; }
-        .btn-reset { background-color: #e74c3c; box-shadow: 0 4px 0 #c0392b; }
-        .btn-print { background-color: #2ecc71; box-shadow: 0 4px 0 #27ae60; }
-
-        .legend {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 1rem;
-            font-weight: bold;
-        }
-
-        .legend-box {
-            width: 24px;
-            height: 24px;
-            border-radius: 6px;
-            border: 3px solid;
-        }
+        .btn-roll { background-color: #ff9800; }
+        .btn-reset { background-color: #795548; }
+        .btn-print { background-color: #4caf50; }
 
         .board {
             display: grid;
-            grid-template-columns: repeat(7, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
             gap: 12px;
             width: 100%;
-            max-width: 900px;
-            background: white;
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 1000px;
+            background: var(--board-bg);
+            padding: 25px;
+            border-radius: 30px;
+            border: 8px solid var(--wood-color);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15), inset 0 0 20px rgba(0,0,0,0.05);
             position: relative;
         }
 
@@ -136,251 +169,253 @@
             align-items: center;
             border-radius: 15px;
             border: 4px solid;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             user-select: none;
             text-align: center;
             padding: 5px;
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='2' fill='%23000' fill-opacity='0.05'/%3E%3C/svg%3E");
         }
 
         .tile:hover {
-            transform: translateY(-5px) scale(1.03);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.15);
             z-index: 10;
-        }
-
-        .tile:active {
-            transform: translateY(0) scale(0.98);
         }
 
         .tile-num {
             position: absolute;
-            top: 4px;
-            left: 8px;
-            font-size: 0.8rem;
-            color: #7f8c8d;
+            top: 2px;
+            left: 6px;
+            font-size: 0.7rem;
+            color: rgba(0,0,0,0.4);
             font-weight: normal;
         }
 
         .token {
             position: absolute;
-            top: 2px;
-            right: 5px;
-            font-size: 1.5rem;
+            top: -15px;
+            right: -10px;
+            font-size: 2rem;
             animation: bounce 0.5s ease;
-            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 3px 3px rgba(0,0,0,0.3));
+            z-index: 20;
         }
 
         @keyframes bounce {
-            0% { transform: translateY(-20px); opacity: 0; }
-            60% { transform: translateY(5px); opacity: 1; }
-            100% { transform: translateY(0); }
+            0% { transform: translateY(-30px) scale(0); opacity: 0; }
+            60% { transform: translateY(5px) scale(1.2); opacity: 1; }
+            100% { transform: translateY(0) scale(1); }
         }
 
-        /* Tile Colors */
-        .start { background-color: var(--start-color); border-color: var(--start-border); color: #d35400; font-size: 1.2rem;}
-        .finish { background-color: var(--finish-color); border-color: var(--finish-border); color: #c0392b; font-size: 1.2rem;}
-        .th { background-color: var(--th-color); border-color: var(--th-border); color: #006064; }
-        .wh { background-color: var(--wh-color); border-color: var(--wh-border); color: #1b5e20; }
-        .qu { background-color: var(--qu-color); border-color: var(--qu-border); color: #4a148c; }
+        /* Tile Classes */
+        .start { background-color: var(--start-bg); border-color: var(--start-border); color: var(--start-text); }
+        .finish { background-color: var(--finish-bg); border-color: var(--finish-border); color: var(--finish-text); background-image: none; }
+        .th { background-color: var(--th-bg); border-color: var(--th-border); color: var(--th-text); }
+        .wh { background-color: var(--wh-bg); border-color: var(--wh-border); color: var(--wh-text); }
+        .qu { background-color: var(--qu-bg); border-color: var(--qu-border); color: var(--qu-text); }
 
         .instructions {
             margin-top: 30px;
             max-width: 900px;
-            background: #fff;
+            background: rgba(255,255,255,0.95);
             padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border: 4px solid var(--wood-color);
             line-height: 1.6;
         }
 
-        .instructions h2 {
-            margin-top: 0;
-            color: #2c3e50;
+        .legend {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .board {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 8px;
-                padding: 10px;
-            }
-            .tile { font-size: 1.1rem; }
-            h1 { font-size: 1.8rem; }
-        }
+        .legend-item { display: flex; align-items: center; gap: 8px; font-weight: bold; }
+        .legend-box { width: 20px; height: 20px; border-radius: 50%; border: 3px solid; }
 
-        /* Print Styles */
         @media print {
-            body { background: white; padding: 0; }
             .no-print { display: none !important; }
-            .board { 
-                box-shadow: none; 
-                border: 2px solid #ccc;
-                grid-template-columns: repeat(7, 1fr);
-                gap: 5px;
-                padding: 10px;
-            }
-            .tile {
-                border-width: 2px;
-                aspect-ratio: auto;
-                height: 60px;
-                box-shadow: none;
-            }
+            .board { border: 2px solid #ccc; box-shadow: none; grid-template-columns: repeat(7, 1fr); }
+            .tile { border-width: 2px; height: 60px; aspect-ratio: auto; }
             .tile:hover { transform: none; }
-            .token { display: none; }
-            .instructions { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+            body { background: white; padding: 0; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>🌟 Yel's Phonics Adventure 🌟</h1>
-        <p class="subtitle">Master the <strong>th</strong>, <strong>wh</strong>, and <strong>qu</strong> sounds!</p>
+        <h1>🌲 Yel's Phonics Forest 🌲</h1>
     </header>
 
     <div class="controls no-print">
-        <div class="dice-display" id="diceDisplay">🎲</div>
-        <button class="btn-roll" onclick="rollDice()">Roll Dice</button>
-        <button class="btn-reset" onclick="resetGame()">Reset Game</button>
-        <button class="btn-print" onclick="window.print()">🖨️ Print Board</button>
+        <div class="token-selector">
+            <span style="font-size:0.9rem; color:#666; font-weight:bold;">Choose:</span>
+            <div class="token-option selected" onclick="selectToken('🦊', this)">🦊</div>
+            <div class="token-option" onclick="selectToken('🐻', this)">🐻</div>
+            <div class="token-option" onclick="selectToken('🐸', this)">🐸</div>
+            <div class="token-option" onclick="selectToken('🐰', this)">🐰</div>
+            <div class="token-option" onclick="selectToken('🦄', this)">🦄</div>
+            <div class="token-option" onclick="selectToken('🐞', this)">🐞</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="dice-display" id="diceDisplay" onclick="rollDice()" title="Click to Roll!">🎲</div>
+        
+        <button class="btn-roll" onclick="rollDice()">Roll</button>
+        <button class="btn-reset" onclick="resetGame()">Reset</button>
+        <button class="btn-print" onclick="window.print()">Print</button>
     </div>
 
     <div class="legend no-print">
-        <div class="legend-item"><div class="legend-box" style="background:var(--th-color); border-color:var(--th-border);"></div> th words</div>
-        <div class="legend-item"><div class="legend-box" style="background:var(--wh-color); border-color:var(--wh-border);"></div> wh words</div>
-        <div class="legend-item"><div class="legend-box" style="background:var(--qu-color); border-color:var(--qu-border);"></div> qu words</div>
+        <div class="legend-item"><div class="legend-box" style="background:var(--th-bg); border-color:var(--th-border);"></div> th words</div>
+        <div class="legend-item"><div class="legend-box" style="background:var(--wh-bg); border-color:var(--wh-border);"></div> wh words</div>
+        <div class="legend-item"><div class="legend-box" style="background:var(--qu-bg); border-color:var(--qu-border);"></div> qu words</div>
     </div>
 
     <div class="board" id="gameBoard">
-        <!-- Tiles will be injected by JS -->
+        <!-- Tiles injected via JS -->
     </div>
 
-    <div class="instructions">
+    <div class="instructions no-print">
         <h2>📜 How to Play</h2>
         <ul>
-            <li><strong>Digital Mode:</strong> Click <b>Roll Dice</b> to move your rocket 🚀. Click any word tile to hear it spoken aloud!</li>
-            <li><strong>Printable Mode:</strong> Click <b>Print Board</b> to play with physical dice and tokens on paper.</li>
-            <li><strong>Goal:</strong> Read every word clearly. If you get stuck, ask a friend or click the tile to hear the sound!</li>
+            <li><strong>1. Pick a Forest Friend:</strong> Click the animal emoji above to choose your token.</li>
+            <li><strong>2. Roll the Big Dice:</strong> Click the dice or the "Roll" button.</li>
+            <li><strong>3. Read the Word:</strong> When you land on a tile, read the word aloud! Click the tile to hear it.</li>
         </ul>
     </div>
 
     <script>
-        // Word Lists
-        const thWords = ["bath", "them", "thin", "cloth", "thud", "math", "then", "this", "moth", "thug", "path", "Beth", "thick", "froth", "thumb", "that", "Seth", "with", "troth", "thus"];
-        const whWords = ["whack", "when", "whip", "whop", "whup", "wham", "whet", "whiz", "whap", "which", "whiff"];
-        const quWords = ["quack", "quell", "quip", "quod", "quad", "quench", "quit", "quag", "quiz", "quilt"];
+        // Raw Word Lists
+        const thRaw = ["bath", "them", "thin", "cloth", "thud", "math", "then", "this", "moth", "thug", "path", "Beth", "thick", "froth", "thumb", "that", "Seth", "with", "troth", "thus"];
+        const whRaw = ["whack", "when", "whip", "whop", "whup (dialect)", "wham", "whet", "whiz", "whap", "which", "whiff"];
+        const quRaw = ["quack", "quell", "quip", "quod (archaic)", "quad", "quench", "quit", "quag", "quiz", "quilt"];
 
+        // Clean words (remove parentheses content)
+        const thWords = thRaw.map(w => w.replace(/\s*\(.*?\)/g, ''));
+        const whWords = whRaw.map(w => w.replace(/\s*\(.*?\)/g, ''));
+        const quWords = quRaw.map(w => w.replace(/\s*\(.*?\)/g, ''));
+
+        let selectedToken = '🦊';
         let currentPosition = 0;
-        const totalTiles = 43; // 0 (Start) + 41 (Words) + 1 (Finish) = 42 indices (0 to 42)
 
-        // Initialize Board
+        // Fisher-Yates Shuffle
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function selectToken(token, element) {
+            selectedToken = token;
+            document.querySelectorAll('.token-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            updateTokenPosition();
+        }
+
         function initBoard() {
             const board = document.getElementById('gameBoard');
             board.innerHTML = '';
 
-            // Start Tile
-            board.appendChild(createTile(0, 'START', 'start'));
+            // Shuffle each group
+            const shuffledTH = shuffleArray([...thWords]);
+            const shuffledWH = shuffleArray([...whWords]);
+            const shuffledQU = shuffleArray([...quWords]);
 
-            // TH Words
-            thWords.forEach((word, i) => {
-                board.appendChild(createTile(i + 1, word, 'th'));
+            // Build Tile Sequence: Start -> TH -> WH -> QU -> Finish
+            let tiles = [
+                { id: 0, text: 'START', type: 'start' }
+            ];
+
+            shuffledTH.forEach(word => tiles.push({ text: word, type: 'th' }));
+            shuffledWH.forEach(word => tiles.push({ text: word, type: 'wh' }));
+            shuffledQU.forEach(word => tiles.push({ text: word, type: 'qu' }));
+            tiles.push({ text: 'FINISH', type: 'finish' });
+
+            // Render
+            tiles.forEach((tileData, index) => {
+                const tile = document.createElement('div');
+                tile.className = `tile ${tileData.type}`;
+                tile.id = `tile-${index}`;
+                tile.onclick = () => speakWord(tileData.text);
+                
+                const num = document.createElement('span');
+                num.className = 'tile-num';
+                num.innerText = index;
+                tile.appendChild(num);
+
+                const wordSpan = document.createElement('span');
+                wordSpan.innerText = tileData.text;
+                tile.appendChild(wordSpan);
+
+                board.appendChild(tile);
             });
-
-            // WH Words
-            whWords.forEach((word, i) => {
-                board.appendChild(createTile(i + 21, word, 'wh'));
-            });
-
-            // QU Words
-            quWords.forEach((word, i) => {
-                board.appendChild(createTile(i + 32, word, 'qu'));
-            });
-
-            // Finish Tile
-            board.appendChild(createTile(42, 'FINISH', 'finish'));
 
             updateTokenPosition();
         }
 
-        function createTile(id, text, className) {
-            const tile = document.createElement('div');
-            tile.className = `tile ${className}`;
-            tile.id = `tile-${id}`;
-            tile.onclick = () => speakWord(text);
-            
-            const num = document.createElement('span');
-            num.className = 'tile-num';
-            num.innerText = id;
-            tile.appendChild(num);
-
-            const wordSpan = document.createElement('span');
-            wordSpan.innerText = text;
-            tile.appendChild(wordSpan);
-
-            return tile;
-        }
-
-        // Speech Synthesis
         function speakWord(text) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(text);
-                utterance.rate = 0.85; // Slightly slower for reading practice
-                utterance.pitch = 1.1;
+                utterance.rate = 0.9;
                 utterance.lang = 'en-US';
                 window.speechSynthesis.speak(utterance);
-                
-                // Visual feedback
-                const tile = event.currentTarget;
-                tile.style.transform = 'scale(0.95)';
-                setTimeout(() => { tile.style.transform = ''; }, 150);
             }
         }
 
-        // Dice & Movement
         function rollDice() {
             const diceDisplay = document.getElementById('diceDisplay');
             const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
             let rolls = 0;
-            const maxRolls = 10;
+            const maxRolls = 12;
             
+            // Disable interaction during roll
+            diceDisplay.style.pointerEvents = 'none';
+
             const interval = setInterval(() => {
-                const randomFace = diceFaces[Math.floor(Math.random() * 6)];
-                diceDisplay.innerText = randomFace;
+                diceDisplay.innerText = diceFaces[Math.floor(Math.random() * 6)];
                 rolls++;
                 
                 if (rolls >= maxRolls) {
                     clearInterval(interval);
                     const finalRoll = Math.floor(Math.random() * 6) + 1;
                     diceDisplay.innerText = diceFaces[finalRoll - 1];
+                    diceDisplay.style.pointerEvents = 'auto';
                     
+                    // Move Token
                     currentPosition += finalRoll;
-                    if (currentPosition > 42) currentPosition = 42;
+                    // Assuming max index is length of array - 1
+                    const maxPos = document.querySelectorAll('.tile').length - 1;
+                    if (currentPosition > maxPos) currentPosition = maxPos;
                     
                     updateTokenPosition();
                     
-                    if (currentPosition === 42) {
-                        setTimeout(() => alert("🎉 Congratulations! You reached FINISH! 🎉"), 300);
+                    if (currentPosition === maxPos) {
+                        setTimeout(() => alert("🌟 You reached the Finish Line! 🌟"), 300);
                     }
                 }
-            }, 80);
+            }, 70);
         }
 
         function updateTokenPosition() {
-            // Remove existing tokens
             document.querySelectorAll('.token').forEach(t => t.remove());
-            
-            // Add token to current tile
             const targetTile = document.getElementById(`tile-${currentPosition}`);
             if (targetTile) {
                 const token = document.createElement('div');
                 token.className = 'token';
-                token.innerText = '🚀';
+                token.innerText = selectedToken;
                 targetTile.appendChild(token);
             }
         }
@@ -389,9 +424,10 @@
             currentPosition = 0;
             document.getElementById('diceDisplay').innerText = '🎲';
             updateTokenPosition();
+            // Optional: Reshuffle board on reset? Let's keep it simple and just move token back.
         }
 
-        // Start the game
+        // Initialize
         initBoard();
     </script>
 </body>
