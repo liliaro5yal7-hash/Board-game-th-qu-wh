@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yel's Phonics Board Game</title>
+    <style>
+        :root {
+            --th-color: #e0f7fa;
+            --th-border: #00bcd4;
+            --wh-color: #e8f5e9;
+            --wh-border: #4caf50;
+            --qu-color: #f3e5f5;
+            --qu-border: #9c27b0;
+            --start-color: #fff9c4;
+            --start-border: #fbc02d;
+            --finish-color: #ffcdd2;
+            --finish-border: #f44336;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #555;
+            margin-top: 5px;
+        }
+
+        .controls {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .dice-display {
+            font-size: 2rem;
+            font-weight: bold;
+            min-width: 60px;
+            text-align: center;
+            background: #ecf0f1;
+            padding: 5px 15px;
+            border-radius: 10px;
+        }
+
+        button {
+            font-family: inherit;
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.1s;
+            font-weight: bold;
+            color: white;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .btn-roll { background-color: #3498db; box-shadow: 0 4px 0 #2980b9; }
+        .btn-reset { background-color: #e74c3c; box-shadow: 0 4px 0 #c0392b; }
+        .btn-print { background-color: #2ecc71; box-shadow: 0 4px 0 #27ae60; }
+
+        .legend {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .legend-box {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            border: 3px solid;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 12px;
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .tile {
+            aspect-ratio: 1 / 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+            border: 4px solid;
+            font-size: 1.4rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            user-select: none;
+            text-align: center;
+            padding: 5px;
+        }
+
+        .tile:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+            z-index: 10;
+        }
+
+        .tile:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .tile-num {
+            position: absolute;
+            top: 4px;
+            left: 8px;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            font-weight: normal;
+        }
+
+        .token {
+            position: absolute;
+            top: 2px;
+            right: 5px;
+            font-size: 1.5rem;
+            animation: bounce 0.5s ease;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
+        }
+
+        @keyframes bounce {
+            0% { transform: translateY(-20px); opacity: 0; }
+            60% { transform: translateY(5px); opacity: 1; }
+            100% { transform: translateY(0); }
+        }
+
+        /* Tile Colors */
+        .start { background-color: var(--start-color); border-color: var(--start-border); color: #d35400; font-size: 1.2rem;}
+        .finish { background-color: var(--finish-color); border-color: var(--finish-border); color: #c0392b; font-size: 1.2rem;}
+        .th { background-color: var(--th-color); border-color: var(--th-border); color: #006064; }
+        .wh { background-color: var(--wh-color); border-color: var(--wh-border); color: #1b5e20; }
+        .qu { background-color: var(--qu-color); border-color: var(--qu-border); color: #4a148c; }
+
+        .instructions {
+            margin-top: 30px;
+            max-width: 900px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            line-height: 1.6;
+        }
+
+        .instructions h2 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .board {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+                padding: 10px;
+            }
+            .tile { font-size: 1.1rem; }
+            h1 { font-size: 1.8rem; }
+        }
+
+        /* Print Styles */
+        @media print {
+            body { background: white; padding: 0; }
+            .no-print { display: none !important; }
+            .board { 
+                box-shadow: none; 
+                border: 2px solid #ccc;
+                grid-template-columns: repeat(7, 1fr);
+                gap: 5px;
+                padding: 10px;
+            }
+            .tile {
+                border-width: 2px;
+                aspect-ratio: auto;
+                height: 60px;
+                box-shadow: none;
+            }
+            .tile:hover { transform: none; }
+            .token { display: none; }
+            .instructions { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🌟 Yel's Phonics Adventure 🌟</h1>
+        <p class="subtitle">Master the <strong>th</strong>, <strong>wh</strong>, and <strong>qu</strong> sounds!</p>
+    </header>
+
+    <div class="controls no-print">
+        <div class="dice-display" id="diceDisplay">🎲</div>
+        <button class="btn-roll" onclick="rollDice()">Roll Dice</button>
+        <button class="btn-reset" onclick="resetGame()">Reset Game</button>
+        <button class="btn-print" onclick="window.print()">🖨️ Print Board</button>
+    </div>
+
+    <div class="legend no-print">
+        <div class="legend-item"><div class="legend-box" style="background:var(--th-color); border-color:var(--th-border);"></div> th words</div>
+        <div class="legend-item"><div class="legend-box" style="background:var(--wh-color); border-color:var(--wh-border);"></div> wh words</div>
+        <div class="legend-item"><div class="legend-box" style="background:var(--qu-color); border-color:var(--qu-border);"></div> qu words</div>
+    </div>
+
+    <div class="board" id="gameBoard">
+        <!-- Tiles will be injected by JS -->
+    </div>
+
+    <div class="instructions">
+        <h2>📜 How to Play</h2>
+        <ul>
+            <li><strong>Digital Mode:</strong> Click <b>Roll Dice</b> to move your rocket 🚀. Click any word tile to hear it spoken aloud!</li>
+            <li><strong>Printable Mode:</strong> Click <b>Print Board</b> to play with physical dice and tokens on paper.</li>
+            <li><strong>Goal:</strong> Read every word clearly. If you get stuck, ask a friend or click the tile to hear the sound!</li>
+        </ul>
+    </div>
+
+    <script>
+        // Word Lists
+        const thWords = ["bath", "them", "thin", "cloth", "thud", "math", "then", "this", "moth", "thug", "path", "Beth", "thick", "froth", "thumb", "that", "Seth", "with", "troth", "thus"];
+        const whWords = ["whack", "when", "whip", "whop", "whup", "wham", "whet", "whiz", "whap", "which", "whiff"];
+        const quWords = ["quack", "quell", "quip", "quod", "quad", "quench", "quit", "quag", "quiz", "quilt"];
+
+        let currentPosition = 0;
+        const totalTiles = 43; // 0 (Start) + 41 (Words) + 1 (Finish) = 42 indices (0 to 42)
+
+        // Initialize Board
+        function initBoard() {
+            const board = document.getElementById('gameBoard');
+            board.innerHTML = '';
+
+            // Start Tile
+            board.appendChild(createTile(0, 'START', 'start'));
+
+            // TH Words
+            thWords.forEach((word, i) => {
+                board.appendChild(createTile(i + 1, word, 'th'));
+            });
+
+            // WH Words
+            whWords.forEach((word, i) => {
+                board.appendChild(createTile(i + 21, word, 'wh'));
+            });
+
+            // QU Words
+            quWords.forEach((word, i) => {
+                board.appendChild(createTile(i + 32, word, 'qu'));
+            });
+
+            // Finish Tile
+            board.appendChild(createTile(42, 'FINISH', 'finish'));
+
+            updateTokenPosition();
+        }
+
+        function createTile(id, text, className) {
+            const tile = document.createElement('div');
+            tile.className = `tile ${className}`;
+            tile.id = `tile-${id}`;
+            tile.onclick = () => speakWord(text);
+            
+            const num = document.createElement('span');
+            num.className = 'tile-num';
+            num.innerText = id;
+            tile.appendChild(num);
+
+            const wordSpan = document.createElement('span');
+            wordSpan.innerText = text;
+            tile.appendChild(wordSpan);
+
+            return tile;
+        }
+
+        // Speech Synthesis
+        function speakWord(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 0.85; // Slightly slower for reading practice
+                utterance.pitch = 1.1;
+                utterance.lang = 'en-US';
+                window.speechSynthesis.speak(utterance);
+                
+                // Visual feedback
+                const tile = event.currentTarget;
+                tile.style.transform = 'scale(0.95)';
+                setTimeout(() => { tile.style.transform = ''; }, 150);
+            }
+        }
+
+        // Dice & Movement
+        function rollDice() {
+            const diceDisplay = document.getElementById('diceDisplay');
+            const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+            let rolls = 0;
+            const maxRolls = 10;
+            
+            const interval = setInterval(() => {
+                const randomFace = diceFaces[Math.floor(Math.random() * 6)];
+                diceDisplay.innerText = randomFace;
+                rolls++;
+                
+                if (rolls >= maxRolls) {
+                    clearInterval(interval);
+                    const finalRoll = Math.floor(Math.random() * 6) + 1;
+                    diceDisplay.innerText = diceFaces[finalRoll - 1];
+                    
+                    currentPosition += finalRoll;
+                    if (currentPosition > 42) currentPosition = 42;
+                    
+                    updateTokenPosition();
+                    
+                    if (currentPosition === 42) {
+                        setTimeout(() => alert("🎉 Congratulations! You reached FINISH! 🎉"), 300);
+                    }
+                }
+            }, 80);
+        }
+
+        function updateTokenPosition() {
+            // Remove existing tokens
+            document.querySelectorAll('.token').forEach(t => t.remove());
+            
+            // Add token to current tile
+            const targetTile = document.getElementById(`tile-${currentPosition}`);
+            if (targetTile) {
+                const token = document.createElement('div');
+                token.className = 'token';
+                token.innerText = '🚀';
+                targetTile.appendChild(token);
+            }
+        }
+
+        function resetGame() {
+            currentPosition = 0;
+            document.getElementById('diceDisplay').innerText = '🎲';
+            updateTokenPosition();
+        }
+
+        // Start the game
+        initBoard();
+    </script>
+</body>
+</html>
